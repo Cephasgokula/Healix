@@ -4,13 +4,14 @@
 
 ### AI-Powered Healthcare Diagnostic Platform
 
-[![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-15.1-000000?style=for-the-badge&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-Express-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![Flask](https://img.shields.io/badge/Flask-Python-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)](https://tensorflow.org/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://mongodb.com/)
 
-*Empowering healthcare with AI-driven disease prediction and emergency triage*
+_Empowering healthcare with AI-driven disease prediction and emergency triage_
 
 [Features](#-features) • [Tech Stack](#-tech-stack) • [Installation](#-installation) • [ML Models](#-ml-models) • [API Endpoints](#-api-endpoints) • [Screenshots](#-screenshots)
 
@@ -34,22 +35,22 @@
 
 ### 🤖 AI/ML Capabilities
 
-| Feature | Description | Technology |
-|---------|-------------|------------|
-| **Disease Prediction** | Predict 5 diseases with up to 98% accuracy | scikit-learn, TensorFlow |
-| **Image Analysis** | X-ray based Pneumonia & COVID-19 detection | CNN, OpenCV, Keras |
-| **NLP Triage** | Zero-shot classification for symptom analysis | Hugging Face Transformers |
-| **Voice Processing** | Real-time speech-to-text transcription | Web Speech API |
+| Feature                | Description                                   | Technology                |
+| ---------------------- | --------------------------------------------- | ------------------------- |
+| **Disease Prediction** | Predict 5 diseases with up to 98% accuracy    | scikit-learn, TensorFlow  |
+| **Image Analysis**     | X-ray based Pneumonia & COVID-19 detection    | CNN, OpenCV, Keras        |
+| **NLP Triage**         | Zero-shot classification for symptom analysis | Hugging Face Transformers |
+| **Voice Processing**   | Real-time speech-to-text transcription        | Web Speech API            |
 
 ### 🩺 Supported Diagnoses
 
-| Disease | Type | Model | Accuracy |
-|---------|------|-------|----------|
-| 🩸 Diabetes | Parameter-based | Logistic Regression | 90% |
-| 🦋 Thyroid | Parameter-based | Random Forest | 98% |
-| 🎀 Breast Cancer | Parameter-based | Logistic Regression | 95% |
-| 🫁 Pneumonia | Image-based (X-ray) | CNN | 92% |
-| 🦠 COVID-19 | Image-based (X-ray) | CNN | 90% |
+| Disease          | Type                | Model               | Accuracy |
+| ---------------- | ------------------- | ------------------- | -------- |
+| 🩸 Diabetes      | Parameter-based     | Logistic Regression | 90%      |
+| 🦋 Thyroid       | Parameter-based     | Random Forest       | 98%      |
+| 🎀 Breast Cancer | Parameter-based     | Logistic Regression | 95%      |
+| 🫁 Pneumonia     | Image-based (X-ray) | CNN                 | 92%      |
+| 🦠 COVID-19      | Image-based (X-ray) | CNN                 | 90%      |
 
 ### 👥 User Features
 
@@ -73,24 +74,28 @@
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 ```
-React.js 18.2 | Vite | Tailwind CSS | Material-UI | Framer Motion
-React Router DOM | Axios | Recharts | Swiper | React Toastify
+Next.js 15.1 (Pages Router) | TypeScript | Tailwind CSS | Geist Fonts
+Axios | Lucide React | Framer Motion
 ```
 
 ### Backend
+
 ```
 Node.js | Express.js | Flask | MongoDB | Mongoose
 JWT Authentication | Bcrypt.js | Multer | GridFS | Nodemailer
 ```
 
 ### Machine Learning
+
 ```
 TensorFlow/Keras | scikit-learn | OpenCV | NumPy
 Hugging Face Transformers (BART) | Pickle/Joblib
 ```
 
 ### APIs & Services
+
 ```
 Web Speech API | REST APIs | CORS
 ```
@@ -101,27 +106,19 @@ Web Speech API | REST APIs | CORS
 
 ```
 healix/
-├── client/                    # React Frontend
-│   ├── public/
-│   │   └── assets/           # Images & Icons
+├── client/                    # Next.js Frontend
+│   ├── public/                # Static Assets
 │   ├── src/
-│   │   ├── Components/       # Reusable UI Components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── VoiceRecorder.jsx
-│   │   │   ├── ServicesCard.jsx
-│   │   │   └── ...
-│   │   ├── Pages/            # Application Pages
-│   │   │   ├── Hero.jsx
-│   │   │   ├── DiagnosesPage.jsx
-│   │   │   ├── LoginPage.jsx
-│   │   │   ├── Admin.jsx
-│   │   │   ├── EmergencyRanking.jsx
-│   │   │   └── ...
-│   │   ├── App.jsx
-│   │   ├── App.css
-│   │   └── main.jsx
+│   │   ├── pages/             # Pages Router
+│   │   │   ├── api/           # API Routes
+│   │   │   ├── _app.tsx       # App Entry
+│   │   │   ├── _document.tsx  # Document Structure
+│   │   │   └── index.tsx      # Home Page
+│   │   ├── styles/            # Global CSS
+│   │   └── components/        # Reusable UI Components
+│   ├── next.config.ts         # Next.js Configuration
 │   ├── package.json
-│   └── vite.config.js
+│   └── tsconfig.json          # TypeScript Configuration
 │
 ├── Server/                    # Backend Services
 │   ├── Controllers/          # Route Controllers
@@ -180,7 +177,7 @@ npm install
 npm run dev
 ```
 
-Frontend runs on: `http://localhost:5173`
+Frontend runs on: `http://localhost:3000`
 
 ### 3️⃣ Backend Node Server Setup
 
@@ -235,6 +232,7 @@ Flask ML server runs on: `http://localhost:5000`
 ### Parameter-Based Models
 
 #### Diabetes Prediction
+
 ```python
 Input Features:
 - Pregnancies, Glucose, BloodPressure, SkinThickness
@@ -245,6 +243,7 @@ Output: Probability (0-1)
 ```
 
 #### Thyroid Disease Prediction
+
 ```python
 Input Features:
 - age, on_thyroxine, query_on_thyroxine
@@ -256,6 +255,7 @@ Output: Probability (0-1)
 ```
 
 #### Breast Cancer Prediction
+
 ```python
 Input Features:
 - radius_mean, texture_mean, perimeter_mean, area_mean
@@ -271,6 +271,7 @@ Output: Probability (0-1)
 ### Image-Based Models (CNN)
 
 #### Pneumonia Detection
+
 ```python
 Input: Chest X-ray image (150x150 RGB)
 Model: Convolutional Neural Network (Keras)
@@ -278,6 +279,7 @@ Output: Probability of Pneumonia
 ```
 
 #### COVID-19 Detection
+
 ```python
 Input: Chest X-ray image (64x64 RGB)
 Model: Convolutional Neural Network (Keras)
@@ -302,52 +304,60 @@ Output:
 ## 📡 API Endpoints
 
 ### Authentication
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/signup` | Register new user |
-| POST | `/login` | User login |
-| POST | `/forgotPassword` | Request password reset |
-| PATCH | `/:encryptedData` | Update password |
+
+| Method | Endpoint          | Description            |
+| ------ | ----------------- | ---------------------- |
+| POST   | `/signup`         | Register new user      |
+| POST   | `/login`          | User login             |
+| POST   | `/forgotPassword` | Request password reset |
+| PATCH  | `/:encryptedData` | Update password        |
 
 ### User Management
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/allusers` | Get all users (Admin) |
-| GET | `/user/:id` | Get user by ID |
-| POST | `/createuser` | Create new user |
-| DELETE | `/user/:id` | Delete user |
+
+| Method | Endpoint      | Description           |
+| ------ | ------------- | --------------------- |
+| GET    | `/allusers`   | Get all users (Admin) |
+| GET    | `/user/:id`   | Get user by ID        |
+| POST   | `/createuser` | Create new user       |
+| DELETE | `/user/:id`   | Delete user           |
 
 ### Disease Diagnosis (Flask)
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/diagnose_Diabetes` | Diabetes prediction |
-| POST | `/diagnose_Thyroid` | Thyroid prediction |
-| POST | `/diagnose_Breast_Cancer` | Breast cancer prediction |
-| POST | `/diagnose_Pneumonia` | Pneumonia detection (X-ray) |
-| POST | `/diagnose_Covid` | COVID-19 detection (X-ray) |
+
+| Method | Endpoint                  | Description                 |
+| ------ | ------------------------- | --------------------------- |
+| POST   | `/diagnose_Diabetes`      | Diabetes prediction         |
+| POST   | `/diagnose_Thyroid`       | Thyroid prediction          |
+| POST   | `/diagnose_Breast_Cancer` | Breast cancer prediction    |
+| POST   | `/diagnose_Pneumonia`     | Pneumonia detection (X-ray) |
+| POST   | `/diagnose_Covid`         | COVID-19 detection (X-ray)  |
 
 ### Audio & Emergency
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/upload-audio` | Upload voice recording |
-| GET | `/emergency-ranking` | Get priority-ranked patients |
-| GET | `/audio/:id` | Stream audio file |
+
+| Method | Endpoint             | Description                  |
+| ------ | -------------------- | ---------------------------- |
+| POST   | `/upload-audio`      | Upload voice recording       |
+| GET    | `/emergency-ranking` | Get priority-ranked patients |
+| GET    | `/audio/:id`         | Stream audio file            |
 
 ---
 
 ## 🖼️ Screenshots
 
 ### 🏠 Home Page
-*Modern landing page with smooth animations and service overview*
+
+_Modern landing page with smooth animations and service overview_
 
 ### 🔬 Diagnosis Page
-*Interactive forms for disease prediction with real-time results*
+
+_Interactive forms for disease prediction with real-time results_
 
 ### 🎙️ Voice Recorder
-*Floating microphone button for voice-based symptom reporting*
+
+_Floating microphone button for voice-based symptom reporting_
 
 ### 🚨 Emergency Dashboard (Admin)
-*AI-powered patient triage with priority ranking*
+
+_AI-powered patient triage with priority ranking_
 
 ---
 
@@ -370,6 +380,7 @@ Contributions are welcome! Please follow these steps:
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
+
 ---
 
 ## 🙏 Acknowledgments
