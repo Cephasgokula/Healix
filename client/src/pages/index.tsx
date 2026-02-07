@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import {
@@ -18,6 +19,8 @@ import { TypeWriter, ServicesCard, CarouselCard, VoiceRecorder } from "@/compone
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { Testimonial, ServiceItem } from "@/types";
+import { uploadAudio } from "@/lib/api";
+import { toast } from "sonner";
 
 // Services data
 const services: ServiceItem[] = [
@@ -123,6 +126,39 @@ const stats = [
 ];
 
 export default function HomePage() {
+  // Auth state - check if user is logged in
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [userName, setUserName] = React.useState("");
+  const [userEmail, setUserEmail] = React.useState("");
+
+  React.useEffect(() => {
+    const jwt = sessionStorage.getItem("jwt");
+    const name = sessionStorage.getItem("userName");
+    const email = sessionStorage.getItem("userEmail");
+    
+    if (jwt) {
+      setIsLoggedIn(true);
+      setUserName(name || "User");
+      setUserEmail(email || "");
+    }
+  }, []);
+
+  const handleVoiceUpload = async (blob: Blob, transcript: string) => {
+    try {
+      const result = await uploadAudio({
+        audioBlob: blob,
+        transcript,
+        name: userName,
+        email: userEmail,
+      });
+      toast.success(`Recording submitted! Urgency score: ${result.urgencyScore}/100`);
+    } catch (error) {
+      console.error("Upload failed:", error);
+      toast.error("Failed to upload recording. Please ensure the server is running.");
+      throw error;
+    }
+  };
+
   return (
     <PageLayout>
       {/* Hero Section */}
@@ -433,13 +469,10 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Voice Recorder FAB */}
-      <VoiceRecorder
-        onUpload={async (blob, transcript) => {
-          // Will integrate with API
-          console.log("Audio uploaded:", blob, transcript);
-        }}
-      />
+      {/* Voice Recorder FAB - Only for logged-in users */}
+      {isLoggedIn && (
+        <VoiceRecorder onUpload={handleVoiceUpload} />
+      )}
     </PageLayout>
   );
 }

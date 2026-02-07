@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import type { DiagnosisResult } from "@/types";
+import { diagnoseThyroid, type ThyroidPayload } from "@/lib/api";
 
 const numericFields = [
   { name: "age", label: "Age", placeholder: "20-80", info: "Your age in years" },
@@ -50,25 +51,27 @@ export default function ThyroidPage() {
     setResult(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const probability = Math.random() * 100;
-      const mockResult: DiagnosisResult = {
-        prediction: probability > 50 ? 1 : 0,
-        probability: Math.round(probability * 10) / 10,
-        riskLevel: probability > 70 ? "high" : probability > 40 ? "medium" : "low",
-        recommendation:
-          probability > 70
-            ? "Thyroid dysfunction detected. Please consult an endocrinologist for comprehensive thyroid panel testing."
-            : probability > 40
-            ? "Some indicators suggest possible thyroid irregularity. Consider follow-up testing."
-            : "Thyroid function appears normal. Continue regular health checkups.",
+      // Map frontend form data to backend field names
+      const payload: ThyroidPayload = {
+        age: parseFloat(formData.age as string || "0"),
+        on_thyroxine: formData.on_thyroxine ? 1 : 0,
+        query_on_thyroxine: formData.query_on_thyroxine ? 1 : 0,
+        on_antithyroid_medication: formData.on_antithyroid_medication ? 1 : 0,
+        pregnant: formData.pregnant ? 1 : 0,
+        thyroid_surgery: formData.thyroid_surgery ? 1 : 0,
+        tumor: formData.tumor ? 1 : 0,
+        T3: parseFloat(formData.T3 as string || "0"),
+        TT4: parseFloat(formData.TT4 as string || "0"),
+        T4U: parseFloat(formData.T4U as string || "0"),
+        FTI: parseFloat(formData.FTI as string || "0"),
       };
 
-      setResult(mockResult);
+      const apiResult = await diagnoseThyroid(payload);
+      setResult(apiResult);
       toast.success("Analysis complete!");
     } catch (error) {
-      toast.error("Analysis failed. Please try again.");
+      console.error("Diagnosis error:", error);
+      toast.error("Analysis failed. Please ensure the backend is running.");
     } finally {
       setIsLoading(false);
     }

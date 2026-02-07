@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import type { DiagnosisResult } from "@/types";
+import { diagnoseDiabetes, type DiabetesPayload } from "@/lib/api";
 
 const inputFields = [
   { name: "pregnancies", label: "Pregnancies", placeholder: "0-17", type: "number", info: "Number of pregnancies" },
@@ -39,27 +40,24 @@ export default function DiabetesPage() {
     setResult(null);
 
     try {
-      // Simulate API call - replace with actual API
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Mock result - in real app, this would come from the API
-      const probability = Math.random() * 100;
-      const mockResult: DiagnosisResult = {
-        prediction: probability > 50 ? 1 : 0,
-        probability: Math.round(probability * 10) / 10,
-        riskLevel: probability > 70 ? "high" : probability > 40 ? "medium" : "low",
-        recommendation:
-          probability > 70
-            ? "High risk detected. Please consult a healthcare provider immediately for proper testing."
-            : probability > 40
-            ? "Moderate risk. Consider lifestyle changes and regular monitoring. Consult your doctor."
-            : "Low risk. Maintain a healthy lifestyle with regular exercise and balanced diet.",
+      // Map frontend form data to backend field names
+      const payload: DiabetesPayload = {
+        Pregnancies: parseFloat(formData.pregnancies || "0"),
+        Glucose: parseFloat(formData.glucose || "0"),
+        BloodPressure: parseFloat(formData.bloodPressure || "0"),
+        SkinThickness: parseFloat(formData.skinThickness || "0"),
+        Insulin: parseFloat(formData.insulin || "0"),
+        BMI: parseFloat(formData.bmi || "0"),
+        DiabetesPedigreeFunction: parseFloat(formData.diabetesPedigreeFunction || "0"),
+        Age: parseFloat(formData.age || "0"),
       };
 
-      setResult(mockResult);
+      const apiResult = await diagnoseDiabetes(payload);
+      setResult(apiResult);
       toast.success("Analysis complete!");
     } catch (error) {
-      toast.error("Analysis failed. Please try again.");
+      console.error("Diagnosis error:", error);
+      toast.error("Analysis failed. Please ensure the backend is running.");
     } finally {
       setIsLoading(false);
     }

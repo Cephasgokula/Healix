@@ -30,29 +30,38 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      // Simulate API call - replace with actual API
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Real API call to backend
+      const response = await fetch("http://localhost:3001/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      });
 
-      // Mock login - in real app, store JWT in sessionStorage
-      const mockUser = {
-        id: "1",
-        name: "John Doe",
-        email: formData.email,
-        role: formData.email.includes("admin") ? "admin" : "user",
-      };
+      const data = await response.json();
 
-      sessionStorage.setItem("user", JSON.stringify(mockUser));
-      sessionStorage.setItem("token", "mock-jwt-token");
+      if (data.status !== "success") {
+        throw new Error(data.message || "Login failed");
+      }
+
+      // Store auth data in sessionStorage
+      sessionStorage.setItem("jwt", data.token);
+      sessionStorage.setItem("userName", data.name);
+      sessionStorage.setItem("userEmail", data.email);
+      sessionStorage.setItem("userRole", data.role || "user");
 
       toast.success("Login successful!");
 
       // Redirect based on role
-      if (mockUser.role === "admin") {
+      if (data.role === "admin") {
         router.push("/admin");
       } else {
         router.push("/");
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast.error("Login failed. Please check your credentials.");
     } finally {
       setIsLoading(false);
@@ -151,10 +160,10 @@ export default function LoginPage() {
               </Link>
             </div>
 
-            {/* Demo hint */}
+            {/* Admin hint */}
             <div className="mt-6 p-3 rounded-lg bg-muted/50 text-center">
               <p className="text-xs text-muted-foreground">
-                Demo: Use any email with "admin" for admin access
+                Admin users can access the dashboard at /admin
               </p>
             </div>
           </CardContent>

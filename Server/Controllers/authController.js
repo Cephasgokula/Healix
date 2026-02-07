@@ -50,6 +50,27 @@ exports.login = catchAsync(async (req, res, next) => {
         return next(new AppError('Please provide email and password', 400));
     }
 
+    // ============================================
+    // HARDCODED ADMIN CREDENTIALS
+    // ============================================
+    const ADMIN_EMAIL = 'admin@healix.com';
+    const ADMIN_PASSWORD = 'Admin@123';
+
+    if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+        const token = jwt.sign({ id: 'admin' }, process.env.JWT_SECRET, {
+            expiresIn: process.env.JWT_EXPIRES_IN
+        });
+        return res.status(200).json({
+            status: 'success',
+            token,
+            data: { encryptedData: 'admin-user' },
+            email: ADMIN_EMAIL,
+            name: 'Admin',
+            role: 'admin'
+        });
+    }
+    // ============================================
+
     const user = await User.findOne({ email }).select('+password');
     
 
@@ -59,7 +80,8 @@ exports.login = catchAsync(async (req, res, next) => {
 
     console.log(user);
     const name = user.name;
-    console.log(name);
+    const role = user.role || 'user';
+    console.log(name, role);
     const token = signToken(user._id);
     const {iv,encryptedData}= Cryption.encrypt(user._id.toString());
     res.status(200).json({
@@ -69,6 +91,7 @@ exports.login = catchAsync(async (req, res, next) => {
         "encryptedData":  encryptedData 
         },
         email,
-        name
+        name,
+        role
     });
 });

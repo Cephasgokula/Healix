@@ -20,73 +20,10 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { EmergencyPatient } from "@/types";
+import { getEmergencyRanking } from "@/lib/api";
+import { toast } from "sonner";
 
-// Mock emergency data - AI ranked by urgency
-const mockEmergencies: EmergencyPatient[] = [
-  {
-    _id: "1",
-    name: "Anonymous",
-    symptoms: "Severe chest pain radiating to left arm, shortness of breath, sweating",
-    urgencyScore: 95,
-    urgencyLevel: "critical",
-    createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(), // 10 min ago
-    status: "pending",
-  },
-  {
-    _id: "2",
-    name: "John D.",
-    symptoms: "Sudden severe headache, vision problems, confusion, difficulty speaking",
-    urgencyScore: 92,
-    urgencyLevel: "critical",
-    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-    status: "pending",
-  },
-  {
-    _id: "3",
-    name: "Maria S.",
-    symptoms: "Severe abdominal pain, vomiting blood, dizziness",
-    urgencyScore: 85,
-    urgencyLevel: "high",
-    createdAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
-    status: "pending",
-  },
-  {
-    _id: "4",
-    name: "Robert K.",
-    symptoms: "High fever (104°F), severe body aches, difficulty breathing",
-    urgencyScore: 78,
-    urgencyLevel: "high",
-    createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-    status: "in-progress",
-  },
-  {
-    _id: "5",
-    name: "Priya P.",
-    symptoms: "Moderate chest pain, anxiety, palpitations",
-    urgencyScore: 65,
-    urgencyLevel: "medium",
-    createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-    status: "pending",
-  },
-  {
-    _id: "6",
-    name: "David L.",
-    symptoms: "Persistent cough, mild fever, fatigue for 5 days",
-    urgencyScore: 45,
-    urgencyLevel: "medium",
-    createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    status: "resolved",
-  },
-  {
-    _id: "7",
-    name: "Sarah M.",
-    symptoms: "Mild allergic reaction, skin rash, itching",
-    urgencyScore: 25,
-    urgencyLevel: "low",
-    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-    status: "resolved",
-  },
-];
+// Mock emergency data removed - now fetching from API
 
 const getUrgencyColor = (level: string) => {
   switch (level) {
@@ -128,8 +65,26 @@ const getTimeAgo = (date: string) => {
 export default function EmergencyPage() {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [expandedId, setExpandedId] = React.useState<string | null>(null);
+  const [emergencies, setEmergencies] = React.useState<EmergencyPatient[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
 
-  const filteredEmergencies = mockEmergencies.filter(
+  // Fetch emergency data from API on mount
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getEmergencyRanking();
+        setEmergencies(data);
+      } catch (error) {
+        console.error("Failed to fetch emergency data:", error);
+        toast.error("Failed to load emergency data. Please ensure the server is running.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const filteredEmergencies = emergencies.filter(
     (e) =>
       e.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       e.symptoms.toLowerCase().includes(searchQuery.toLowerCase())
@@ -140,9 +95,9 @@ export default function EmergencyPage() {
   };
 
   const stats = {
-    critical: mockEmergencies.filter((e) => e.urgencyLevel === "critical").length,
-    high: mockEmergencies.filter((e) => e.urgencyLevel === "high").length,
-    pending: mockEmergencies.filter((e) => e.status === "pending").length,
+    critical: emergencies.filter((e) => e.urgencyLevel === "critical").length,
+    high: emergencies.filter((e) => e.urgencyLevel === "high").length,
+    pending: emergencies.filter((e) => e.status === "pending").length,
   };
 
   return (

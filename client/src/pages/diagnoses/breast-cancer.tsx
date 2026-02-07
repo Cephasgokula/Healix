@@ -12,8 +12,10 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import type { DiagnosisResult } from "@/types";
+import { diagnoseBreastCancer, type BreastCancerPayload } from "@/lib/api";
 
 const inputFields = [
+  // Mean values
   { name: "radius_mean", label: "Radius (Mean)", placeholder: "6.98-28.11", info: "Mean of distances from center to points on perimeter" },
   { name: "texture_mean", label: "Texture (Mean)", placeholder: "9.71-39.28", info: "Standard deviation of gray-scale values" },
   { name: "perimeter_mean", label: "Perimeter (Mean)", placeholder: "43.79-188.5", info: "Mean size of the core tumor" },
@@ -22,8 +24,15 @@ const inputFields = [
   { name: "compactness_mean", label: "Compactness (Mean)", placeholder: "0.02-0.35", info: "Perimeter^2 / Area - 1.0" },
   { name: "concavity_mean", label: "Concavity (Mean)", placeholder: "0-0.43", info: "Severity of concave portions" },
   { name: "concave_points_mean", label: "Concave Points (Mean)", placeholder: "0-0.20", info: "Number of concave portions" },
-  { name: "symmetry_mean", label: "Symmetry (Mean)", placeholder: "0.11-0.30", info: "Symmetry of the cell" },
-  { name: "fractal_dimension_mean", label: "Fractal Dimension (Mean)", placeholder: "0.05-0.10", info: "Coastline approximation - 1" },
+  // Worst values (most extreme measurements)
+  { name: "radius_worst", label: "Radius (Worst)", placeholder: "7.93-36.04", info: "Worst/largest radius measurement" },
+  { name: "texture_worst", label: "Texture (Worst)", placeholder: "12.02-49.54", info: "Worst texture value" },
+  { name: "perimeter_worst", label: "Perimeter (Worst)", placeholder: "50.41-251.2", info: "Worst perimeter measurement" },
+  { name: "area_worst", label: "Area (Worst)", placeholder: "185.2-4254", info: "Worst area measurement" },
+  { name: "smoothness_worst", label: "Smoothness (Worst)", placeholder: "0.07-0.22", info: "Worst smoothness value" },
+  { name: "compactness_worst", label: "Compactness (Worst)", placeholder: "0.03-1.06", info: "Worst compactness value" },
+  { name: "concavity_worst", label: "Concavity (Worst)", placeholder: "0-1.25", info: "Worst concavity measurement" },
+  { name: "concave_points_worst", label: "Concave Pts (Worst)", placeholder: "0-0.29", info: "Worst concave points count" },
 ];
 
 export default function BreastCancerPage() {
@@ -41,25 +50,32 @@ export default function BreastCancerPage() {
     setResult(null);
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      const probability = Math.random() * 100;
-      const mockResult: DiagnosisResult = {
-        prediction: probability > 50 ? 1 : 0,
-        probability: Math.round(probability * 10) / 10,
-        riskLevel: probability > 70 ? "high" : probability > 40 ? "medium" : "low",
-        recommendation:
-          probability > 70
-            ? "Analysis suggests potential malignancy. Please consult an oncologist immediately for further testing (biopsy, imaging)."
-            : probability > 40
-            ? "Some indicators warrant attention. Schedule a follow-up with your healthcare provider for additional screening."
-            : "Results appear benign. Continue with regular breast health screenings as recommended.",
+      // Map frontend form data to backend field names
+      const payload: BreastCancerPayload = {
+        radius_mean: parseFloat(formData.radius_mean || "0"),
+        texture_mean: parseFloat(formData.texture_mean || "0"),
+        perimeter_mean: parseFloat(formData.perimeter_mean || "0"),
+        area_mean: parseFloat(formData.area_mean || "0"),
+        smoothness_mean: parseFloat(formData.smoothness_mean || "0"),
+        compactness_mean: parseFloat(formData.compactness_mean || "0"),
+        concavity_mean: parseFloat(formData.concavity_mean || "0"),
+        concave_points_mean: parseFloat(formData.concave_points_mean || "0"),
+        radius_worst: parseFloat(formData.radius_worst || "0"),
+        texture_worst: parseFloat(formData.texture_worst || "0"),
+        perimeter_worst: parseFloat(formData.perimeter_worst || "0"),
+        area_worst: parseFloat(formData.area_worst || "0"),
+        smoothness_worst: parseFloat(formData.smoothness_worst || "0"),
+        compactness_worst: parseFloat(formData.compactness_worst || "0"),
+        concavity_worst: parseFloat(formData.concavity_worst || "0"),
+        concave_points_worst: parseFloat(formData.concave_points_worst || "0"),
       };
 
-      setResult(mockResult);
+      const apiResult = await diagnoseBreastCancer(payload);
+      setResult(apiResult);
       toast.success("Analysis complete!");
     } catch (error) {
-      toast.error("Analysis failed. Please try again.");
+      console.error("Diagnosis error:", error);
+      toast.error("Analysis failed. Please ensure the backend is running.");
     } finally {
       setIsLoading(false);
     }

@@ -11,7 +11,7 @@ import {
   Trash2,
   Eye,
   Clock,
-  Filter,
+  Loader2,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,89 +33,108 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
-// Mock audio recordings data
-const mockRecordings = [
-  {
-    id: "1",
-    userId: "u1",
-    userName: "Priya Patel",
-    duration: "2:34",
-    transcript: "I have been experiencing severe headaches for the past three days. The pain is mostly on the right side of my head and gets worse in the evening. I also feel nauseous sometimes.",
-    urgency: "medium",
-    createdAt: "2024-04-01T10:30:00Z",
-    status: "processed",
-  },
-  {
-    id: "2",
-    userId: "u2",
-    userName: "Rajesh Kumar",
-    transcript: "Chest pain that started suddenly this morning. Sharp pain that radiates to my left arm. Difficulty breathing. I'm very worried.",
-    duration: "1:45",
-    urgency: "critical",
-    createdAt: "2024-04-01T09:15:00Z",
-    status: "processed",
-  },
-  {
-    id: "3",
-    userId: "u3",
-    userName: "Ananya Gupta",
-    transcript: "Mild fever and sore throat for two days. Taking over-the-counter medication but not improving much.",
-    duration: "1:12",
-    urgency: "low",
-    createdAt: "2024-04-01T08:00:00Z",
-    status: "processed",
-  },
-  {
-    id: "4",
-    userId: "u4",
-    userName: "Vikram Singh",
-    transcript: "Stomach pain after eating. Bloating and gas. Happens almost every day now.",
-    duration: "1:58",
-    urgency: "medium",
-    createdAt: "2024-03-31T15:45:00Z",
-    status: "pending",
-  },
-  {
-    id: "5",
-    userId: "u5",
-    userName: "Kavita Nair",
-    transcript: "High blood pressure readings. Getting 160/100 consistently. On medication but no improvement.",
-    duration: "2:10",
-    urgency: "high",
-    createdAt: "2024-03-31T14:20:00Z",
-    status: "processed",
-  },
-];
+// Backend API base URL
+const API_URL = "http://localhost:3001";
 
-const getUrgencyColor = (urgency: string) => {
-  switch (urgency) {
-    case "critical":
-      return "bg-[#DC2626] text-white";
-    case "high":
-      return "bg-[#EA580C] text-white";
-    case "medium":
-      return "bg-[#FBBF24] text-black";
-    case "low":
-      return "bg-[#22C55E] text-white";
+// Recording type from backend
+interface Recording {
+  id: string;
+  fileId: string;
+  name: string;
+  email: string;
+  transcript: string;
+  sentimentScore: number;
+  urgencyRank: number;
+  uploadDate: string;
+  aiAnalysis?: {
+    severity: string;
+    detectedSymptoms: string[];
+  };
+}
+
+const getUrgencyColor = (urgencyRank: number) => {
+  switch (urgencyRank) {
+    case 1:
+      return "bg-[#DC2626] text-white"; // critical
+    case 2:
+      return "bg-[#EA580C] text-white"; // high
+    case 3:
+      return "bg-[#FBBF24] text-black"; // medium
     default:
-      return "bg-gray-200 text-gray-800";
+      return "bg-[#22C55E] text-white"; // low
+  }
+};
+
+const getUrgencyLabel = (urgencyRank: number) => {
+  switch (urgencyRank) {
+    case 1: return "critical";
+    case 2: return "high";
+    case 3: return "medium";
+    default: return "low";
   }
 };
 
 export default function AudioPage() {
   const [searchQuery, setSearchQuery] = React.useState("");
-  const [selectedRecording, setSelectedRecording] = React.useState<typeof mockRecordings[0] | null>(null);
+  const [selectedRecording, setSelectedRecording] = React.useState<Recording | null>(null);
   const [playingId, setPlayingId] = React.useState<string | null>(null);
+  const [recordings, setRecordings] = React.useState<Recording[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
-  const filteredRecordings = mockRecordings.filter(
+  // Fetch recordings from API
+  React.useEffect(() => {
+    const fetchRecordings = async () => {
+      try {
+        const response = await fetch(`${API_URL}/audios`);
+        const data = await response.json();
+        setRecordings(data);
+      } catch (error) {
+        console.error("Failed to fetch recordings:", error);
+        toast.error("Failed to load recordings");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchRecordings();
+  }, []);
+
+  const filteredRecordings = recordings.filter(
     (recording) =>
-      recording.userName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recording.transcript.toLowerCase().includes(searchQuery.toLowerCase())
+      recording.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      recording.transcript?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const togglePlay = (id: string) => {
-    setPlayingId(playingId === id ? null : id);
+  const togglePlay = (recording: Recording) => {
+    if (playingId === recording.id) {
+      // Stop playing
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setPlayingId(null);
+    } else {
+      // Stop any current playback
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      // Start new playback
+      const audio = new Audio(`${API_URL}/audio/${recording.fileId}`);
+      audio.onended = () => setPlayingId(null);
+      audio.onerror = () => {
+        toast.error("Failed to play audio");
+        setPlayingId(null);
+      };
+      audio.play();
+      audioRef.current = audio;
+      setPlayingId(recording.id);
+    }
+  };
+
+  const handleDownload = (recording: Recording) => {
+    window.open(`${API_URL}/audio/${recording.fileId}`, "_blank");
   };
 
   return (
@@ -138,7 +157,7 @@ export default function AudioPage() {
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <Clock className="h-4 w-4" />
-            {mockRecordings.length} recordings total
+            {isLoading ? "Loading..." : `${recordings.length} recordings total`}
           </div>
         </motion.div>
 
@@ -176,15 +195,23 @@ export default function AudioPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="p-0">
+              {isLoading ? (
+                <div className="flex items-center justify-center p-8">
+                  <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+                </div>
+              ) : filteredRecordings.length === 0 ? (
+                <div className="text-center p-8 text-muted-foreground">
+                  No recordings found
+                </div>
+              ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>User</TableHead>
-                      <TableHead>Duration</TableHead>
                       <TableHead>Transcript Preview</TableHead>
                       <TableHead>Urgency</TableHead>
-                      <TableHead>Status</TableHead>
+                      <TableHead>Score</TableHead>
                       <TableHead>Date</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -197,43 +224,34 @@ export default function AudioPage() {
                             <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
                               <Mic className="h-5 w-5 text-accent" />
                             </div>
-                            <span className="font-medium">{recording.userName}</span>
+                            <div>
+                              <span className="font-medium">{recording.name || "Anonymous"}</span>
+                              <p className="text-xs text-muted-foreground">{recording.email}</p>
+                            </div>
                           </div>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {recording.duration}
                         </TableCell>
                         <TableCell className="max-w-xs">
                           <p className="truncate text-muted-foreground text-sm">
-                            {recording.transcript}
+                            {recording.transcript || "No transcript"}
                           </p>
                         </TableCell>
                         <TableCell>
-                          <Badge className={getUrgencyColor(recording.urgency)}>
-                            {recording.urgency}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge
-                            variant="outline"
-                            className={
-                              recording.status === "processed"
-                                ? "text-secondary border-secondary"
-                                : "text-yellow-500 border-yellow-500"
-                            }
-                          >
-                            {recording.status}
+                          <Badge className={getUrgencyColor(recording.urgencyRank)}>
+                            {getUrgencyLabel(recording.urgencyRank)}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-muted-foreground">
-                          {new Date(recording.createdAt).toLocaleDateString()}
+                          {recording.sentimentScore}/100
+                        </TableCell>
+                        <TableCell className="text-muted-foreground">
+                          {new Date(recording.uploadDate).toLocaleDateString()}
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center justify-end gap-1">
                             <Button
                               variant="ghost"
                               size="icon"
-                              onClick={() => togglePlay(recording.id)}
+                              onClick={() => togglePlay(recording)}
                             >
                               {playingId === recording.id ? (
                                 <Pause className="h-4 w-4" />
@@ -248,7 +266,11 @@ export default function AudioPage() {
                             >
                               <Eye className="h-4 w-4" />
                             </Button>
-                            <Button variant="ghost" size="icon">
+                            <Button 
+                              variant="ghost" 
+                              size="icon"
+                              onClick={() => handleDownload(recording)}
+                            >
                               <Download className="h-4 w-4" />
                             </Button>
                             <Button variant="ghost" size="icon" className="text-destructive">
@@ -261,6 +283,7 @@ export default function AudioPage() {
                   </TableBody>
                 </Table>
               </div>
+              )}
             </CardContent>
           </Card>
         </motion.div>
@@ -282,27 +305,50 @@ export default function AudioPage() {
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
                 <div>
-                  <p className="font-medium">{selectedRecording.userName}</p>
+                  <p className="font-medium">{selectedRecording.name || "Anonymous"}</p>
                   <p className="text-sm text-muted-foreground">
-                    {new Date(selectedRecording.createdAt).toLocaleString()}
+                    {selectedRecording.email} • {new Date(selectedRecording.uploadDate).toLocaleString()}
                   </p>
                 </div>
-                <Badge className={getUrgencyColor(selectedRecording.urgency)}>
-                  {selectedRecording.urgency}
+                <Badge className={getUrgencyColor(selectedRecording.urgencyRank)}>
+                  {getUrgencyLabel(selectedRecording.urgencyRank)}
                 </Badge>
               </div>
               <div>
                 <h4 className="font-medium mb-2">Transcript</h4>
                 <p className="p-4 rounded-lg bg-muted/30 text-muted-foreground">
-                  {selectedRecording.transcript}
+                  {selectedRecording.transcript || "No transcript available"}
                 </p>
               </div>
+              {selectedRecording.aiAnalysis && (
+                <div>
+                  <h4 className="font-medium mb-2">AI Analysis</h4>
+                  <div className="p-4 rounded-lg bg-muted/30 space-y-2">
+                    <p className="text-sm">
+                      <span className="text-muted-foreground">Severity:</span>{" "}
+                      <span className="font-medium">{selectedRecording.aiAnalysis.severity}</span>
+                    </p>
+                    {selectedRecording.aiAnalysis.detectedSymptoms?.length > 0 && (
+                      <p className="text-sm">
+                        <span className="text-muted-foreground">Symptoms:</span>{" "}
+                        {selectedRecording.aiAnalysis.detectedSymptoms.join(", ")}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-4">
-                <Button className="flex-1">
-                  <Play className="mr-2 h-4 w-4" />
-                  Play Recording
+                <Button 
+                  className="flex-1"
+                  onClick={() => togglePlay(selectedRecording)}
+                >
+                  {playingId === selectedRecording.id ? (
+                    <><Pause className="mr-2 h-4 w-4" /> Pause</>
+                  ) : (
+                    <><Play className="mr-2 h-4 w-4" /> Play Recording</>
+                  )}
                 </Button>
-                <Button variant="outline">
+                <Button variant="outline" onClick={() => handleDownload(selectedRecording)}>
                   <Download className="mr-2 h-4 w-4" />
                   Download
                 </Button>

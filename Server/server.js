@@ -13,7 +13,7 @@ require('dotenv').config({ path: './config.env' });
 const { analyzeUrgencyWithAI, fallbackAnalysis } = require('./AI_Urgency/urgencyAnalyzer');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 const DB = process.env.DATABASE;
 
 app.use(cors());
