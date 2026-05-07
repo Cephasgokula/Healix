@@ -167,7 +167,7 @@ export default function AudioPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+          <Card className="bg-card border-0 shadow-md">
             <CardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -188,7 +188,7 @@ export default function AudioPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="bg-white dark:bg-slate-800 border-0 shadow-md overflow-hidden">
+          <Card className="bg-card border-0 shadow-md overflow-hidden">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">
                 Recordings ({filteredRecordings.length})

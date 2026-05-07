@@ -52,7 +52,7 @@ export function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg">
+              <div className="bg-primary p-2 rounded-lg">
                 <Stethoscope className="h-6 w-6 text-white" />
               </div>
               <span className="text-xl font-bold text-white">Healix</span>

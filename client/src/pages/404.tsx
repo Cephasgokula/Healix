@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -21,7 +21,7 @@ export default function NotFoundPage() {
           className="mb-8"
         >
           <div className="relative inline-block">
-            <span className="text-9xl font-bold text-gradient">404</span>
+            <span className="text-9xl font-bold text-primary">404</span>
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}

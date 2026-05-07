@@ -26,7 +26,7 @@ export function CarouselCard({ testimonial, className }: CarouselCardProps) {
   };
 
   return (
-    <Card className={`bg-white dark:bg-slate-800 border-0 shadow-lg h-full ${className}`}>
+    <Card className={`bg-card border-0 shadow-lg h-full ${className}`}>
       <CardContent className="p-6 flex flex-col h-full">
         {/* Quote icon */}
         <div className="mb-4">

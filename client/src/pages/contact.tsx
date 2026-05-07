@@ -73,7 +73,7 @@ export default function ContactPage() {
     <PageLayout>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -86,7 +86,7 @@ export default function ContactPage() {
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
               We'd Love to{" "}
-              <span className="text-gradient">Hear from You</span>
+              <span className="text-primary">Hear from You</span>
             </h1>
             <p className="text-lg text-muted-foreground">
               Have questions about our services? Want to partner with us?
@@ -118,7 +118,7 @@ export default function ContactPage() {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                 >
-                  <Card className="bg-white dark:bg-slate-800 border-0 shadow-md hover:shadow-lg transition-shadow">
+                  <Card className="bg-card border-0 shadow-md hover:shadow-lg transition-shadow">
                     <CardContent className="p-5 flex items-start gap-4">
                       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <info.icon className="h-6 w-6 text-primary" />
@@ -149,7 +149,7 @@ export default function ContactPage() {
                 transition={{ delay: 0.4 }}
               >
                 <Card className="overflow-hidden border-0 shadow-lg">
-                  <div className="h-48 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                  <div className="h-48 bg-primary/10 flex items-center justify-center">
                     <div className="text-center">
                       <MapPin className="h-8 w-8 text-primary mx-auto mb-2" />
                       <p className="text-sm text-muted-foreground">Map Integration</p>
@@ -166,7 +166,7 @@ export default function ContactPage() {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              <Card className="bg-white dark:bg-slate-800 border-0 shadow-lg">
+              <Card className="bg-card border-0 shadow-lg">
                 <CardContent className="p-8">
                   <h2 className="text-2xl font-bold text-foreground mb-6">Send us a Message</h2>
                   <form onSubmit={handleSubmit} className="space-y-6">
@@ -286,7 +286,7 @@ export default function ContactPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+                <Card className="bg-card border-0 shadow-md">
                   <CardContent className="p-6">
                     <h3 className="font-semibold text-foreground mb-2">{faq.q}</h3>
                     <p className="text-muted-foreground">{faq.a}</p>

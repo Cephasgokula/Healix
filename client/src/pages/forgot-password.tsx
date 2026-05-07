@@ -40,25 +40,25 @@ export default function ForgotPasswordPage() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <Card className="bg-white dark:bg-slate-800 border-0 shadow-2xl">
-          <CardHeader className="text-center pb-2">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4">
+        <Card className="bg-card border-0 shadow-2xl">
+          <CardHeader className="text-center pb-2 pt-8">
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mx-auto mb-6">
               {isSubmitted ? (
                 <CheckCircle2 className="h-8 w-8 text-white" />
               ) : (
                 <Stethoscope className="h-8 w-8 text-white" />
               )}
             </div>
-            <CardTitle className="text-2xl font-bold">
+            <CardTitle className="text-2xl font-bold text-foreground">
               {isSubmitted ? "Check Your Email" : "Forgot Password?"}
             </CardTitle>
-            <p className="text-muted-foreground text-sm mt-2">
+            <p className="text-muted-foreground text-sm mt-3">
               {isSubmitted
                 ? `We've sent a password reset link to ${email}`
                 : "No worries, we'll send you reset instructions"}
             </p>
           </CardHeader>
-          <CardContent className="pt-4">
+          <CardContent className="pt-6 px-8 pb-8">
             {isSubmitted ? (
               <div className="space-y-6">
                 <div className="p-4 rounded-lg bg-secondary/10 border border-secondary/20">

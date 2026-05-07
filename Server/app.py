@@ -1,21 +1,34 @@
+import os
+import logging
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import pickle
 import numpy as np
 import cv2
 import tensorflow as tf
-from joblib import load
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# ---- Logging setup ----
+logging.basicConfig(level=logging.INFO, format='%(asctime)s [%(levelname)s] %(message)s')
+logger = logging.getLogger(__name__)
+
 app = Flask(__name__)
-CORS(app, supports_credentials=True)
+
+# CORS origin from env — never hardcode (Rule 2)
+CORS_ORIGIN = os.environ.get('CORS_ORIGIN', 'http://localhost:3000')
+CORS(app, supports_credentials=True, origins=[CORS_ORIGIN])
 
 
 @app.after_request
 def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', 'http://localhost:5173')
+    response.headers.add('Access-Control-Allow-Origin', CORS_ORIGIN)
     response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
     response.headers.add('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
     response.headers.add('Access-Control-Allow-Credentials', 'true')
     return response
+
 
 # Handle preflight requests for all endpoints
 @app.route('/diagnose_Diabetes', methods=['OPTIONS'])
@@ -30,14 +43,66 @@ def options():
     return response
 
 
-#Diabetes controller
+# ---- Load models once at startup (not per-request) ----
+MODEL_DIR = './Ml Models'
 
+logger.info('Loading ML models...')
+
+try:
+    diabetes_model = pickle.load(open(f'{MODEL_DIR}/diabetes.pkl', 'rb'))
+    logger.info('✅ Diabetes model loaded')
+except Exception as e:
+    diabetes_model = None
+    logger.error('❌ Failed to load diabetes model: %s', e)
+
+try:
+    thyroid_model = pickle.load(open(f'{MODEL_DIR}/thyroid_model.pkl', 'rb'))
+    logger.info('✅ Thyroid model loaded')
+except Exception as e:
+    thyroid_model = None
+    logger.error('❌ Failed to load thyroid model: %s', e)
+
+try:
+    breast_cancer_model = pickle.load(open(f'{MODEL_DIR}/Breast_Cancer_Model.pkl', 'rb'))
+    logger.info('✅ Breast cancer model loaded')
+except Exception as e:
+    breast_cancer_model = None
+    logger.error('❌ Failed to load breast cancer model: %s', e)
+
+try:
+    pneumonia_model = tf.keras.models.load_model(f'{MODEL_DIR}/pneumonia_model.h5', compile=False)
+    logger.info('✅ Pneumonia model loaded')
+except Exception as e:
+    pneumonia_model = None
+    logger.error('❌ Failed to load pneumonia model: %s', e)
+
+try:
+    covid_model = tf.keras.models.load_model(f'{MODEL_DIR}/Covid2.h5')
+    logger.info('✅ COVID-19 model loaded')
+except Exception as e:
+    covid_model = None
+    logger.error('❌ Failed to load COVID-19 model: %s', e)
+
+logger.info('Model loading complete.')
+
+
+# ---- Helper: safe error response (Rule 3 — never expose raw errors) ----
+def error_response(user_message: str, exception: Exception, status_code: int = 500):
+    """Log the real error server-side but return a safe message to the client."""
+    logger.error('%s — %s', user_message, exception, exc_info=True)
+    return jsonify({'status': 'failed', 'error': user_message}), status_code
+
+
+# ============================================================
+# Diabetes Controller
+# ============================================================
 @app.route('/diagnose_Diabetes', methods=['POST'])
 def diagnose_Diabetes():
     try:
-        diabetes_model = pickle.load(open('./Ml Models/diabetes.pkl', 'rb'))
+        if diabetes_model is None:
+            return error_response('Diabetes model is not available', Exception('Model not loaded'), 503)
+
         data = request.get_json()
-        # Extract features in correct order
         int_features = [
             float(data['Pregnancies']),
             float(data['Glucose']),
@@ -51,20 +116,23 @@ def diagnose_Diabetes():
         final = [np.array(int_features)]
         prediction = diabetes_model.predict_proba(final)
         output = '{0:.{1}f}'.format(prediction[0][1], 2)
-        return jsonify({'status':'success','probability': output})
+        return jsonify({'status': 'success', 'probability': output})
+    except KeyError as e:
+        return error_response(f'Missing required field: {e}', e, 400)
     except Exception as e:
-        return jsonify({'status':'failed','error': str(e)})
+        return error_response('Diabetes diagnosis failed', e)
 
 
-
-#Thyroid controller
-
+# ============================================================
+# Thyroid Controller
+# ============================================================
 @app.route('/diagnose_Thyroid', methods=['POST'])
 def diagnose_Thyroid():
     try:
-        thyroid_model=pickle.load(open('./Ml Models/thyroid_model.pkl', 'rb'))
+        if thyroid_model is None:
+            return error_response('Thyroid model is not available', Exception('Model not loaded'), 503)
+
         data = request.get_json()
-        # Extract features in correct order
         int_features = [
             float(data['age']),
             float(data['on_thyroxine']),
@@ -81,17 +149,23 @@ def diagnose_Thyroid():
         final = [np.array(int_features)]
         prediction = thyroid_model.predict_proba(final)
         output = '{0:.{1}f}'.format(prediction[0][1], 2)
-        return jsonify({'status':'success','probability': output})
+        return jsonify({'status': 'success', 'probability': output})
+    except KeyError as e:
+        return error_response(f'Missing required field: {e}', e, 400)
     except Exception as e:
-        return jsonify({'error': str(e)})
+        return error_response('Thyroid diagnosis failed', e)
 
-#Breast Cancer Controller
+
+# ============================================================
+# Breast Cancer Controller
+# ============================================================
 @app.route('/diagnose_Breast_Cancer', methods=['POST'])
 def diagnose_Breast_Cancer():
     try:
-        Breast_Cancer_model = pickle.load(open('./Ml Models/Breast_Cancer_Model.pkl', 'rb'))
+        if breast_cancer_model is None:
+            return error_response('Breast cancer model is not available', Exception('Model not loaded'), 503)
+
         data = request.get_json()
-        # Extract features in correct order
         int_features = [
             float(data['radius_mean']),
             float(data['texture_mean']),
@@ -111,51 +185,70 @@ def diagnose_Breast_Cancer():
             float(data['concave_points_worst'])
         ]
         final = [np.array(int_features)]
-        prediction = Breast_Cancer_model.predict_proba(final)
+        prediction = breast_cancer_model.predict_proba(final)
         output = '{0:.{1}f}'.format(prediction[0][1], 2)
         return jsonify({'status': 'success', 'probability': float(output)})
+    except KeyError as e:
+        return error_response(f'Missing required field: {e}', e, 400)
     except Exception as e:
-        return jsonify({'error': str(e)})       
+        return error_response('Breast cancer diagnosis failed', e)
 
-#Pneumonia Controller
+
+# ============================================================
+# Pneumonia Controller
+# ============================================================
 @app.route('/diagnose_Pneumonia', methods=['POST'])
 def diagnose_Pneumonia():
     try:
+        if pneumonia_model is None:
+            return error_response('Pneumonia model is not available', Exception('Model not loaded'), 503)
+
         if 'image' not in request.files:
-            return jsonify({'error': 'No file part'})
-        
-        pneumonia_model = tf.keras.models.load_model('./Ml Models/pneumonia_model.h5', compile=False)
-        image = request.files['image'].read()
-        nparr = np.frombuffer(image, np.uint8)
+            return jsonify({'status': 'failed', 'error': 'No image file uploaded'}), 400
+
+        image_bytes = request.files['image'].read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        if image is None:
+            return jsonify({'status': 'failed', 'error': 'Invalid image file — could not decode'}), 400
+
         image = cv2.resize(image, (150, 150))
         image = np.expand_dims(image, axis=0)
         prediction = pneumonia_model.predict(image)
         output = '{0:.{1}f}'.format(prediction[0][1], 2)
-        return jsonify({'status':'success','probability': output})
+        return jsonify({'status': 'success', 'probability': output})
     except Exception as e:
-        return jsonify({'error': str(e)})
-    
+        return error_response('Pneumonia diagnosis failed', e)
 
-#Covid Controller
+
+# ============================================================
+# Covid Controller
+# ============================================================
 @app.route('/diagnose_Covid', methods=['POST'])
 def diagnose_Covid():
     try:
+        if covid_model is None:
+            return error_response('COVID-19 model is not available', Exception('Model not loaded'), 503)
+
         if 'image' not in request.files:
-            return jsonify({'error': 'No file part'})
-        Covid_model=tf.keras.models.load_model('./Ml Models/Covid2.h5')    
-        image = request.files['image'].read()
-  
-        nparr = np.frombuffer(image, np.uint8)
+            return jsonify({'status': 'failed', 'error': 'No image file uploaded'}), 400
+
+        image_bytes = request.files['image'].read()
+        nparr = np.frombuffer(image_bytes, np.uint8)
         image = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+        if image is None:
+            return jsonify({'status': 'failed', 'error': 'Invalid image file — could not decode'}), 400
+
         image = cv2.resize(image, (64, 64))
         image = np.expand_dims(image, axis=0)
-        prediction = Covid_model.predict(image)
+        prediction = covid_model.predict(image)
         output = '{0:.{1}f}'.format(prediction[0][0], 2)
-        return jsonify({'status':'success','probability': output})
+        return jsonify({'status': 'success', 'probability': output})
     except Exception as e:
-        return jsonify({'error': str(e)})     
-    
+        return error_response('COVID-19 diagnosis failed', e)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

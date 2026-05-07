@@ -10,15 +10,15 @@ import {
   Brain,
   Shield,
   Clock,
-  Users,
   Mic,
   ChevronRight,
+  Users,
 } from "lucide-react";
 import { PageLayout } from "@/components/layout";
-import { TypeWriter, ServicesCard, CarouselCard, VoiceRecorder } from "@/components/features";
+import { TypeWriter, ServicesCard, VoiceRecorder } from "@/components/features";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Testimonial, ServiceItem } from "@/types";
+import type { ServiceItem } from "@/types";
 import { uploadAudio } from "@/lib/api";
 import { toast } from "sonner";
 
@@ -92,31 +92,6 @@ const whyChooseUs = [
   },
 ];
 
-// Testimonials data
-const testimonials: Testimonial[] = [
-  {
-    id: "1",
-    name: "Dr. Sarah Johnson",
-    role: "Cardiologist, Apollo Hospital",
-    rating: 5,
-    review: "Healix has transformed how we handle patient triage. The AI-powered urgency ranking helps us prioritize critical cases instantly.",
-  },
-  {
-    id: "2",
-    name: "Rajesh Kumar",
-    role: "Patient",
-    rating: 5,
-    review: "The diabetes risk assessment helped me identify early warning signs. I'm now managing my health proactively thanks to Healix.",
-  },
-  {
-    id: "3",
-    name: "Dr. Priya Sharma",
-    role: "General Physician",
-    rating: 5,
-    review: "The voice recording feature is incredibly useful. Patients can describe symptoms naturally and I get accurate transcripts.",
-  },
-];
-
 // Stats data
 const stats = [
   { value: "98%", label: "Diagnosis Accuracy" },
@@ -162,11 +137,11 @@ export default function HomePage() {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
-        {/* Background gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
-        <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-accent/10 rounded-full blur-3xl" />
+      <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-background py-16 lg:py-20">
+        {/* Background white */}
+        <div className="absolute inset-0 bg-background" />
+        <div className="absolute top-20 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-primary/5 rounded-full blur-3xl" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -183,14 +158,12 @@ export default function HomePage() {
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground leading-tight mb-6">
                 Your Health,{" "}
-                <span className="text-gradient">
-                  <TypeWriter
-                    words={["Analyzed", "Predicted", "Protected", "Prioritized"]}
-                    typingSpeed={80}
-                    deletingSpeed={40}
-                    delayBetweenWords={2000}
-                  />
-                </span>
+                <TypeWriter
+                  words={["Analyzed", "Predicted", "Protected", "Prioritized"]}
+                  typingSpeed={80}
+                  deletingSpeed={40}
+                  delayBetweenWords={1500}
+                />
               </h1>
 
               <p className="text-lg text-muted-foreground mb-8 max-w-xl">
@@ -246,12 +219,12 @@ export default function HomePage() {
                 <motion.div
                   animate={{ rotate: -360 }}
                   transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                  className="absolute inset-8 rounded-full border-2 border-dashed border-accent/20"
+                  className="absolute inset-8 rounded-full border-2 border-dashed border-primary/20"
                 />
 
                 {/* Center icon */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-48 h-48 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center shadow-2xl shadow-primary/25">
+                  <div className="w-48 h-48 rounded-full bg-primary flex items-center justify-center shadow-2xl shadow-primary/25">
                     <Activity className="h-24 w-24 text-white" />
                   </div>
                 </div>
@@ -295,28 +268,28 @@ export default function HomePage() {
       </section>
 
       {/* Services Section */}
-      <section className="py-20 lg:py-28 bg-muted/30">
+      <section className="py-20 lg:py-28 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/10 text-secondary text-sm font-medium mb-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
               <Activity className="h-4 w-4" />
               Our Services
             </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
               AI-Powered Healthcare Solutions
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
               From disease prediction to emergency triage, our platform offers comprehensive
               health assessment tools powered by advanced machine learning.
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {services.map((service, index) => (
               <ServicesCard key={service.id} {...service} index={index} />
             ))}
@@ -325,23 +298,23 @@ export default function HomePage() {
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 lg:py-28">
+      <section className="py-20 lg:py-28 bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 text-accent text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
                 <Shield className="h-4 w-4" />
                 Why Choose Healix
               </div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-6">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-8">
                 Trusted by Thousands for{" "}
-                <span className="text-gradient">Accurate Diagnosis</span>
+                <span className="text-primary">Accurate Diagnosis</span>
               </h2>
-              <p className="text-muted-foreground mb-8">
+              <p className="text-muted-foreground mb-10 text-lg">
                 Our platform combines cutting-edge AI technology with medical expertise
                 to provide you with reliable health insights and recommendations.
               </p>
@@ -374,16 +347,16 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="relative"
             >
-              <Card className="p-8 bg-gradient-to-br from-primary to-accent text-white overflow-hidden relative">
+              <Card className="p-10 bg-primary text-white overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2" />
                 <CardContent className="p-0 relative z-10">
                   <Stethoscope className="h-12 w-12 mb-6" />
-                  <h3 className="text-2xl font-bold mb-4">Start Your Health Journey</h3>
-                  <p className="mb-6 text-white/80">
+                  <h3 className="text-2xl font-bold mb-6">Start Your Health Journey</h3>
+                  <p className="mb-8 text-white/90 text-base leading-relaxed">
                     Get instant access to AI-powered diagnostics, voice symptom recording,
                     and personalized health recommendations.
                   </p>
-                  <Button asChild variant="secondary" className="bg-white text-primary hover:bg-white/90">
+                  <Button asChild variant="secondary" className="bg-card text-primary hover:bg-card/90">
                     <Link href="/signup">
                       Create Free Account
                       <ChevronRight className="ml-2 h-4 w-4" />
@@ -393,79 +366,6 @@ export default function HomePage() {
               </Card>
             </motion.div>
           </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-20 lg:py-28 bg-muted/30">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              <Users className="h-4 w-4" />
-              Testimonials
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
-              What Our Users Say
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Hear from healthcare professionals and patients who trust Healix for their health needs.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, index) => (
-              <motion.div
-                key={testimonial.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <CarouselCard testimonial={testimonial} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 lg:py-28">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="relative rounded-3xl bg-gradient-to-br from-primary via-primary to-accent p-12 lg:p-16 text-center overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10" />
-            <div className="relative z-10">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Ready to Take Control of Your Health?
-              </h2>
-              <p className="text-white/80 max-w-2xl mx-auto mb-8 text-lg">
-                Join thousands of users who trust Healix for AI-powered health insights.
-                Start your journey to better health today.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Button size="lg" asChild variant="secondary" className="bg-white text-primary hover:bg-white/90">
-                  <Link href="/signup">
-                    Get Started Free
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-                <Button size="lg" variant="outline" asChild className="border-white text-white hover:bg-white/10">
-                  <Link href="/contact">
-                    Contact Us
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 

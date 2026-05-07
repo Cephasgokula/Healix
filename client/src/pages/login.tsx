@@ -75,17 +75,17 @@ export default function LoginPage() {
         animate={{ opacity: 1, y: 0 }}
         className="w-full max-w-md"
       >
-        <Card className="bg-white dark:bg-slate-800 border-0 shadow-2xl">
-          <CardHeader className="text-center pb-2">
-            <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center mx-auto mb-4">
+        <Card className="bg-card border-0 shadow-2xl">
+          <CardHeader className="text-center pb-2 pt-8">
+            <div className="w-16 h-16 rounded-full bg-primary flex items-center justify-center mx-auto mb-6">
               <Stethoscope className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <p className="text-muted-foreground text-sm mt-2">
+            <CardTitle className="text-2xl font-bold text-foreground">Welcome Back</CardTitle>
+            <p className="text-muted-foreground text-sm mt-3">
               Sign in to access your health dashboard
             </p>
           </CardHeader>
-          <CardContent className="pt-4">
+          <CardContent className="pt-6 px-8 pb-8">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

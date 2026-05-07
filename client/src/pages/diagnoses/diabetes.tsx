@@ -93,7 +93,7 @@ export default function DiabetesPage() {
     <PageLayout>
       {/* Header */}
       <section className="relative py-12 lg:py-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-background to-red-500/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -125,7 +125,7 @@ export default function DiabetesPage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-2"
             >
-              <Card className="bg-white dark:bg-slate-800 border-0 shadow-lg">
+              <Card className="bg-card border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Activity className="h-5 w-5 text-orange-500" />
@@ -163,7 +163,7 @@ export default function DiabetesPage() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600"
+                      className="w-full bg-primary hover:bg-primary/90"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -188,7 +188,7 @@ export default function DiabetesPage() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
             >
-              <Card className={`bg-white dark:bg-slate-800 border-0 shadow-lg h-full ${result ? getRiskBgColor(result.riskLevel) : ""}`}>
+              <Card className={`bg-card border-0 shadow-lg h-full ${result ? getRiskBgColor(result.riskLevel) : ""}`}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {result ? (

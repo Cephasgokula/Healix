@@ -76,7 +76,7 @@ export default function AboutPage() {
     <PageLayout>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -89,7 +89,7 @@ export default function AboutPage() {
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
               Revolutionizing Healthcare with{" "}
-              <span className="text-gradient">Artificial Intelligence</span>
+              <span className="text-primary">Artificial Intelligence</span>
             </h1>
             <p className="text-lg text-muted-foreground">
               Healix is a comprehensive healthcare platform that leverages cutting-edge
@@ -150,9 +150,9 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="h-full bg-white dark:bg-slate-800 border-0 shadow-lg hover:shadow-xl transition-shadow">
+                <Card className="h-full bg-card border-0 shadow-lg hover:shadow-xl transition-shadow">
                   <CardContent className="p-8">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-6">
                       <value.icon className="h-7 w-7 text-white" />
                     </div>
                     <h3 className="text-xl font-semibold text-foreground mb-3">{value.title}</h3>
@@ -191,10 +191,10 @@ export default function AboutPage() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
               >
-                <Card className="text-center bg-white dark:bg-slate-800 border-0 shadow-lg overflow-hidden">
-                  <div className="h-32 bg-gradient-to-br from-primary via-primary/80 to-accent" />
+                <Card className="text-center bg-card border-0 shadow-lg overflow-hidden">
+                  <div className="h-32 bg-primary" />
                   <CardContent className="pt-4 pb-6 px-6 -mt-12">
-                    <div className="w-20 h-20 rounded-full bg-white dark:bg-slate-700 border-4 border-white shadow-lg mx-auto mb-4 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full bg-card border-4 border-card shadow-lg mx-auto mb-4 flex items-center justify-center">
                       <span className="text-2xl font-bold text-primary">
                         {member.name.split(" ").map(n => n[0]).join("")}
                       </span>

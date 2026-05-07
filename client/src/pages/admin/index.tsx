@@ -112,7 +112,7 @@ export default function AdminDashboard() {
               transition={{ delay: index * 0.1 }}
             >
               <Link href={stat.href}>
-                <Card className="bg-white dark:bg-slate-800 border-0 shadow-md hover:shadow-lg transition-shadow cursor-pointer group">
+                <Card className="bg-card border-0 shadow-md hover:shadow-lg transition-shadow cursor-pointer group">
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between">
                       <div className={`w-12 h-12 rounded-xl ${stat.bgColor} flex items-center justify-center`}>
@@ -144,7 +144,7 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+            <Card className="bg-card border-0 shadow-md">
               <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Users className="h-5 w-5 text-primary" />
@@ -191,7 +191,7 @@ export default function AdminDashboard() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.5 }}
           >
-            <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+            <Card className="bg-card border-0 shadow-md">
               <CardHeader className="flex flex-row items-center justify-between pb-4">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <AlertTriangle className="h-5 w-5 text-destructive" />
@@ -230,7 +230,7 @@ export default function AdminDashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <Card className="bg-gradient-to-br from-primary to-accent text-white border-0 shadow-lg">
+          <Card className="bg-primary text-white border-0 shadow-lg">
             <CardContent className="p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h3 className="text-xl font-bold">Need to process emergency cases?</h3>
@@ -238,7 +238,7 @@ export default function AdminDashboard() {
                   Review AI-ranked emergency cases and triage patients efficiently.
                 </p>
               </div>
-              <Button asChild variant="secondary" className="bg-white text-primary hover:bg-white/90">
+              <Button asChild variant="secondary" className="bg-card text-primary hover:bg-card/90">
                 <Link href="/admin/emergency">
                   View Emergency Queue
                 </Link>

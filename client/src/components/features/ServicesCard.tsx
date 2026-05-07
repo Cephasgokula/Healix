@@ -52,29 +52,29 @@ export function ServicesCard({
       <Link href={href}>
         <Card
           className={cn(
-            "group relative overflow-hidden bg-white dark:bg-slate-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer h-full",
+            "group relative overflow-hidden bg-card border-0 shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer h-full",
             className
           )}
         >
-          {/* Gradient overlay on hover */}
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-accent/0 group-hover:from-primary/5 group-hover:to-accent/5 transition-all duration-500" />
+          {/* Teal overlay on hover */}
+          <div className="absolute inset-0 bg-card group-hover:bg-primary/5 transition-all duration-500" />
 
-          <CardContent className="p-6 relative z-10">
+          <CardContent className="p-8 relative z-10">
             {/* Icon container */}
             <motion.div
               whileHover={{ rotate: 5, scale: 1.1 }}
-              className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary to-accent p-3 mb-5 shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300"
+              className="w-16 h-16 rounded-xl bg-primary p-3 mb-6 shadow-lg shadow-primary/20 group-hover:shadow-primary/40 transition-all duration-300 flex items-center justify-center"
             >
-              <Icon className="h-full w-full text-white" />
+              <Icon className="h-8 w-8 text-white" />
             </motion.div>
 
             {/* Title */}
-            <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors duration-300">
+            <h3 className="text-lg font-semibold text-foreground mb-4 group-hover:text-primary transition-colors duration-300">
               {title}
             </h3>
 
             {/* Description */}
-            <p className="text-muted-foreground mb-6 line-clamp-2">{description}</p>
+            <p className="text-muted-foreground mb-8 text-sm leading-relaxed">{description}</p>
 
             {/* Learn More */}
             <div className="flex items-center text-primary font-medium">
@@ -84,7 +84,7 @@ export function ServicesCard({
           </CardContent>
 
           {/* Decorative corner */}
-          <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute -bottom-6 -right-6 w-24 h-24 bg-primary/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         </Card>
       </Link>
     </motion.div>

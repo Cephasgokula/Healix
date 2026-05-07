@@ -5,36 +5,36 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Healix Design System */
+  /* Healix Design System — Teal + Slate */
   --radius: 0.625rem;
 
   /* Core Colors */
-  --background: #f7fafc;
-  --foreground: #1f2937;
+  --background: #fafafa;
+  --foreground: #1e293b;
 
-  /* Primary: Medical Blue */
-  --primary: #2f80ed;
+  /* Primary: Teal */
+  --primary: #0d9488;
   --primary-foreground: #ffffff;
 
-  /* Secondary: Mint Green */
-  --secondary: #10b981;
+  /* Secondary: Teal lighter */
+  --secondary: #0d9488;
   --secondary-foreground: #ffffff;
 
-  /* Accent: AI Cyan */
-  --accent: #22d3ee;
-  --accent-foreground: #1f2937;
+  /* Accent: Teal tint (no more orange) */
+  --accent: #0d9488;
+  --accent-foreground: #ffffff;
 
   /* Card/Surface */
   --card: #ffffff;
-  --card-foreground: #1f2937;
+  --card-foreground: #1e293b;
 
   /* Popover */
   --popover: #ffffff;
-  --popover-foreground: #1f2937;
+  --popover-foreground: #1e293b;
 
   /* Muted */
   --muted: #f1f5f9;
-  --muted-foreground: #6b7280;
+  --muted-foreground: #64748b;
 
   /* Destructive */
   --destructive: #ef4444;
@@ -42,40 +42,40 @@
 
   /* Warning */
   --warning: #f59e0b;
-  --warning-foreground: #1f2937;
+  --warning-foreground: #ffffff;
 
   /* Success */
-  --success: #10b981;
+  --success: #0d9488;
   --success-foreground: #ffffff;
 
   /* Border & Input */
-  --border: #e5e7eb;
-  --input: #e5e7eb;
-  --ring: #2f80ed;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0d9488;
 
   /* Chart colors for analytics */
-  --chart-1: #2f80ed;
-  --chart-2: #10b981;
-  --chart-3: #22d3ee;
-  --chart-4: #f59e0b;
-  --chart-5: #8b5cf6;
+  --chart-1: #0d9488;
+  --chart-2: #14b8a6;
+  --chart-3: #2dd4bf;
+  --chart-4: #5eead4;
+  --chart-5: #99f6e4;
 
   /* Sidebar */
   --sidebar: #ffffff;
-  --sidebar-foreground: #1f2937;
-  --sidebar-primary: #2f80ed;
+  --sidebar-foreground: #1e293b;
+  --sidebar-primary: #0d9488;
   --sidebar-primary-foreground: #ffffff;
   --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #1f2937;
-  --sidebar-border: #e5e7eb;
-  --sidebar-ring: #2f80ed;
+  --sidebar-accent-foreground: #1e293b;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #0d9488;
 
   /* Emergency Priority Colors */
   --priority-critical: #ef4444;
   --priority-high: #f97316;
   --priority-medium: #f59e0b;
   --priority-low: #10b981;
-  --priority-minimal: #6b7280;
+  --priority-minimal: #64748b;
 }
 
 @theme inline {
@@ -133,22 +133,22 @@
 
 .dark {
   --background: #0f172a;
-  --foreground: #f8fafc;
+  --foreground: #f1f5f9;
 
-  --primary: #3b82f6;
-  --primary-foreground: #ffffff;
+  --primary: #2dd4bf;
+  --primary-foreground: #0f172a;
 
-  --secondary: #10b981;
+  --secondary: #14b8a6;
   --secondary-foreground: #ffffff;
 
-  --accent: #22d3ee;
-  --accent-foreground: #f8fafc;
+  --accent: #14b8a6;
+  --accent-foreground: #ffffff;
 
   --card: #1e293b;
-  --card-foreground: #f8fafc;
+  --card-foreground: #f1f5f9;
 
   --popover: #1e293b;
-  --popover-foreground: #f8fafc;
+  --popover-foreground: #f1f5f9;
 
   --muted: #334155;
   --muted-foreground: #94a3b8;
@@ -157,23 +157,23 @@
   --destructive-foreground: #ffffff;
 
   --warning: #f59e0b;
-  --warning-foreground: #0f172a;
+  --warning-foreground: #ffffff;
 
-  --success: #10b981;
-  --success-foreground: #ffffff;
+  --success: #2dd4bf;
+  --success-foreground: #0f172a;
 
   --border: #334155;
   --input: #334155;
-  --ring: #3b82f6;
+  --ring: #2dd4bf;
 
   --sidebar: #1e293b;
-  --sidebar-foreground: #f8fafc;
-  --sidebar-primary: #3b82f6;
-  --sidebar-primary-foreground: #ffffff;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #2dd4bf;
+  --sidebar-primary-foreground: #0f172a;
   --sidebar-accent: #334155;
-  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-accent-foreground: #f1f5f9;
   --sidebar-border: #334155;
-  --sidebar-ring: #3b82f6;
+  --sidebar-ring: #2dd4bf;
 }
 
 @layer base {
@@ -196,19 +196,12 @@
 /* Custom utility classes for Healix */
 @layer utilities {
   .glass {
-    @apply bg-white/80 backdrop-blur-md border border-white/20;
+    @apply bg-card/80 backdrop-blur-md border border-border/50;
   }
   .glass-dark {
-    @apply bg-black/40 backdrop-blur-md border border-white/10;
-  }
-  .gradient-primary {
-    background: linear-gradient(135deg, #2f80ed 0%, #22d3ee 100%);
-  }
-  .gradient-secondary {
-    background: linear-gradient(135deg, #10b981 0%, #22d3ee 100%);
+    @apply bg-card/40 backdrop-blur-md border border-border/30;
   }
   .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background: linear-gradient(135deg, #2f80ed 0%, #22d3ee 100%);
+    color: var(--primary);
   }
 }

@@ -7,7 +7,7 @@ const { GridFSBucket, ObjectId } = require('mongodb');
 const userRoutes = require('./Routes/userRoutes');
 const AudioUpload = require('./Models/AudioUpload');
 const fs = require('fs');
-require('dotenv').config({ path: './config.env' });
+require('dotenv').config({ path: './.env' });
 
 // Import AI-based urgency analyzer
 const { analyzeUrgencyWithAI, fallbackAnalysis } = require('./AI_Urgency/urgencyAnalyzer');
@@ -106,6 +106,11 @@ mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
   // Upload audio endpoint
   app.post('/upload-audio', upload.single('audio'), async (req, res) => {
     try {
+      if (!gfsBucket) {
+        console.error('❌ Database not connected: gfsBucket is undefined');
+        return res.status(503).json({ message: 'Database connection is still initializing. Please try again in a few seconds.' });
+      }
+
       if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
   
       const { name, email, transcript } = req.body; // transcript will come from frontend
@@ -222,6 +227,11 @@ mongoose.connect(DB, { useNewUrlParser: true, useUnifiedTopology: true })
   console.log('Received request to /audios');
 
   try {
+    if (!gfsBucket) {
+      console.error('❌ Database not connected: gfsBucket is undefined');
+      return res.status(503).json({ message: 'Database connection is still initializing.' });
+    }
+
     // Fetch ALL audio records, sorted by most recent first
     const audioRecords = await AudioUpload.find({}).sort({ createdAt: -1 });
     console.log(`📊 Found ${audioRecords.length} audio records`);

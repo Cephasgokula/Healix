@@ -135,7 +135,7 @@ export default function HospitalsPage() {
     <PageLayout>
       {/* Hero Section */}
       <section className="relative py-16 lg:py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -147,7 +147,7 @@ export default function HospitalsPage() {
               Healthcare Network
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Find <span className="text-gradient">Healthcare Providers</span> Near You
+              Find <span className="text-primary">Healthcare Providers</span> Near You
             </h1>
             <p className="text-lg text-muted-foreground">
               Connect with top-rated doctors and hospitals in your area.
@@ -158,7 +158,7 @@ export default function HospitalsPage() {
       </section>
 
       {/* Search & Filter Section */}
-      <section className="py-8 border-b border-border bg-white dark:bg-slate-900 sticky top-16 lg:top-20 z-30">
+      <section className="py-8 border-b border-border bg-background sticky top-16 lg:top-20 z-30">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">

@@ -103,7 +103,7 @@ export default function BreastCancerPage() {
     <PageLayout>
       {/* Header */}
       <section className="relative py-12 lg:py-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 via-background to-rose-500/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -134,7 +134,7 @@ export default function BreastCancerPage() {
               animate={{ opacity: 1, x: 0 }}
               className="lg:col-span-2"
             >
-              <Card className="bg-white dark:bg-slate-800 border-0 shadow-lg">
+              <Card className="bg-card border-0 shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Heart className="h-5 w-5 text-pink-500" />
@@ -172,7 +172,7 @@ export default function BreastCancerPage() {
                     <Button
                       type="submit"
                       size="lg"
-                      className="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600"
+                      className="w-full bg-primary hover:bg-primary/90"
                       disabled={isLoading}
                     >
                       {isLoading ? (
@@ -194,7 +194,7 @@ export default function BreastCancerPage() {
 
             {/* Result Panel */}
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-              <Card className={`bg-white dark:bg-slate-800 border-0 shadow-lg h-full ${result ? getRiskBgColor(result.riskLevel) : ""}`}>
+              <Card className={`bg-card border-0 shadow-lg h-full ${result ? getRiskBgColor(result.riskLevel) : ""}`}>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     {result ? (

@@ -26,42 +26,47 @@ export function TypeWriter({
   const [isDeleting, setIsDeleting] = React.useState(false);
 
   React.useEffect(() => {
+    let timeout: NodeJS.Timeout;
+
     const currentWord = words[currentWordIndex];
 
-    const timeout = setTimeout(
-      () => {
-        if (!isDeleting) {
-          // Typing
-          if (currentText.length < currentWord.length) {
+    if (!isDeleting && currentText === currentWord) {
+      // Word complete, wait then start deleting
+      timeout = setTimeout(() => setIsDeleting(true), delayBetweenWords);
+    } else if (isDeleting && currentText === "") {
+      // Word fully deleted, move to next word and stop deleting
+      setIsDeleting(false);
+      setCurrentWordIndex((prev) => (prev + 1) % words.length);
+    } else {
+      // Normal typing or deleting
+      timeout = setTimeout(
+        () => {
+          if (!isDeleting) {
             setCurrentText(currentWord.slice(0, currentText.length + 1));
           } else {
-            // Word complete, wait then start deleting
-            setTimeout(() => setIsDeleting(true), delayBetweenWords);
-          }
-        } else {
-          // Deleting
-          if (currentText.length > 0) {
             setCurrentText(currentText.slice(0, -1));
-          } else {
-            // Move to next word
-            setIsDeleting(false);
-            setCurrentWordIndex((prev) => (prev + 1) % words.length);
           }
-        }
-      },
-      isDeleting ? deletingSpeed : typingSpeed
-    );
+        },
+        isDeleting ? deletingSpeed : typingSpeed
+      );
+    }
 
     return () => clearTimeout(timeout);
   }, [currentText, isDeleting, currentWordIndex, words, typingSpeed, deletingSpeed, delayBetweenWords]);
 
   return (
-    <span className={cn("inline-flex items-center", className)}>
-      <span>{currentText}</span>
+    <span className="inline-flex items-center">
+      <span className={cn("inline-block relative", className)}>
+        {currentText}
+        {/* Invisible shadow text to maintain width and prevent jumping */}
+        <span className="invisible h-0 block pointer-events-none" aria-hidden="true">
+          {words.reduce((a, b) => (a.length > b.length ? a : b))}
+        </span>
+      </span>
       <motion.span
         animate={{ opacity: [1, 0] }}
         transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
-        className={cn("ml-1 inline-block w-[3px] h-[1.2em] bg-primary", cursorClassName)}
+        className={cn("ml-1 inline-block w-[3px] h-[1.1em] bg-primary", cursorClassName)}
       />
     </span>
   );

@@ -37,9 +37,9 @@ export function DoctorCard({ doctor, onBookAppointment }: DoctorCardProps) {
       whileHover={{ y: -5 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="overflow-hidden h-full bg-white dark:bg-slate-800 border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-        {/* Gradient header */}
-        <div className="h-24 bg-gradient-to-br from-primary via-primary/80 to-accent relative">
+      <Card className="overflow-hidden h-full bg-card border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+        {/* Teal header */}
+        <div className="h-24 bg-primary relative">
           <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
             <Avatar className="h-24 w-24 border-4 border-white shadow-lg">
               <AvatarImage src={doctor.image} alt={doctor.name} />
@@ -50,18 +50,18 @@ export function DoctorCard({ doctor, onBookAppointment }: DoctorCardProps) {
           </div>
         </div>
 
-        <CardContent className="pt-16 pb-4 text-center">
-          <h3 className="text-lg font-semibold text-foreground">{doctor.name}</h3>
-          <p className="text-sm text-muted-foreground mb-3">{doctor.specialization}</p>
+        <CardContent className="pt-20 pb-6 px-6 text-center">
+          <h3 className="text-lg font-semibold text-foreground mb-2">{doctor.name}</h3>
+          <p className="text-sm text-muted-foreground mb-6">{doctor.specialization}</p>
 
           {/* Rating */}
-          <div className="flex items-center justify-center gap-1 mb-4">
+          <div className="flex items-center justify-center gap-1 mb-6">
             {renderStars(doctor.rating)}
             <span className="text-sm text-muted-foreground ml-1">({doctor.rating})</span>
           </div>
 
           {/* Info badges */}
-          <div className="flex flex-wrap justify-center gap-2 mb-4">
+          <div className="flex flex-wrap justify-center gap-2 mb-6">
             <Badge variant="secondary" className="text-xs">
               <Clock className="h-3 w-3 mr-1" />
               {doctor.experience}+ years
@@ -74,7 +74,7 @@ export function DoctorCard({ doctor, onBookAppointment }: DoctorCardProps) {
           </div>
 
           {/* Location & Contact */}
-          <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="space-y-3 text-sm text-muted-foreground mb-6">
             <div className="flex items-center justify-center gap-2">
               <MapPin className="h-4 w-4 text-primary" />
               <span className="truncate">{doctor.location}</span>
@@ -85,7 +85,7 @@ export function DoctorCard({ doctor, onBookAppointment }: DoctorCardProps) {
             </div>
           </div>
 
-          <p className="text-xs text-muted-foreground mt-3">{doctor.hospital}</p>
+          <p className="text-xs text-muted-foreground">{doctor.hospital}</p>
         </CardContent>
 
         <CardFooter className="pt-0">

@@ -167,7 +167,7 @@ export default function EmergencyPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+          <Card className="bg-card border-0 shadow-md">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center gap-2">
                 <Clock className="h-5 w-5 text-muted-foreground" />
@@ -219,7 +219,7 @@ export default function EmergencyPage() {
 
                         {/* Expanded Content */}
                         {isExpanded && (
-                          <div className="p-4 bg-white dark:bg-slate-800 space-y-4">
+                          <div className="p-4 bg-card space-y-4">
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
                               <Clock className="h-4 w-4" />
                               {getTimeAgo(emergency.createdAt)}

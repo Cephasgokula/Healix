@@ -25,7 +25,7 @@ const diagnoses = [
     type: "Parameter-based",
     inputs: ["Glucose", "BMI", "Age", "Blood Pressure", "Insulin Levels"],
     href: "/diagnoses/diabetes",
-    gradient: "from-orange-500 to-red-500",
+    gradient: "bg-primary",
   },
   {
     id: "thyroid",
@@ -37,7 +37,7 @@ const diagnoses = [
     type: "Parameter-based",
     inputs: ["T3", "T4", "TSH", "Medical History", "Age"],
     href: "/diagnoses/thyroid",
-    gradient: "from-purple-500 to-indigo-500",
+    gradient: "bg-primary",
   },
   {
     id: "breast-cancer",
@@ -49,7 +49,7 @@ const diagnoses = [
     type: "Parameter-based",
     inputs: ["Tumor Size", "Texture", "Smoothness", "Compactness"],
     href: "/diagnoses/breast-cancer",
-    gradient: "from-pink-500 to-rose-500",
+    gradient: "bg-primary",
   },
   {
     id: "pneumonia",
@@ -61,7 +61,7 @@ const diagnoses = [
     type: "Image-based (X-Ray)",
     inputs: ["Chest X-Ray Image"],
     href: "/diagnoses/pneumonia",
-    gradient: "from-blue-500 to-cyan-500",
+    gradient: "bg-primary",
     badge: "Image Analysis",
   },
   {
@@ -74,7 +74,7 @@ const diagnoses = [
     type: "Image-based (X-Ray)",
     inputs: ["Chest X-Ray Image"],
     href: "/diagnoses/covid",
-    gradient: "from-teal-500 to-green-500",
+    gradient: "bg-primary",
     badge: "Image Analysis",
   },
 ];
@@ -84,7 +84,7 @@ export default function DiagnosesPage() {
     <PageLayout>
       {/* Hero Section */}
       <section className="relative py-16 lg:py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-accent/5" />
+        <div className="absolute inset-0 bg-background" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,7 +96,7 @@ export default function DiagnosesPage() {
               AI-Powered Diagnostics
             </div>
             <h1 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
-              Advanced <span className="text-gradient">Disease Prediction</span> Models
+              Advanced <span className="text-primary">Disease Prediction</span> Models
             </h1>
             <p className="text-lg text-muted-foreground">
               Our machine learning models analyze your health parameters to provide
@@ -119,16 +119,16 @@ export default function DiagnosesPage() {
                 transition={{ delay: index * 0.1 }}
               >
                 <Link href={diagnosis.href}>
-                  <Card className="group h-full bg-white dark:bg-slate-800 border-0 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden">
-                    {/* Gradient header */}
+                  <Card className="group h-full bg-card border-0 shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer overflow-hidden">
+                    {/* Teal header */}
                     <div
-                      className={`h-2 bg-gradient-to-r ${diagnosis.gradient}`}
+                      className={`h-2 ${diagnosis.gradient}`}
                     />
                     <CardContent className="p-6">
                       {/* Icon & Badge */}
                       <div className="flex items-start justify-between mb-4">
                         <div
-                          className={`w-14 h-14 rounded-xl bg-gradient-to-br ${diagnosis.gradient} p-3 shadow-lg`}
+                          className={`w-14 h-14 rounded-xl ${diagnosis.gradient} p-3 shadow-lg`}
                         >
                           <diagnosis.icon className="h-full w-full text-white" />
                         </div>

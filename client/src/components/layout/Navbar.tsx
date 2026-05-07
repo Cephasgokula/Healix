@@ -3,16 +3,18 @@
 import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Menu,
-  X,
   User,
   LogOut,
   Settings,
   ChevronDown,
   Stethoscope,
+  Sun,
+  Moon,
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -34,6 +36,8 @@ const navLinks = [
 
 export function Navbar() {
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -43,6 +47,7 @@ export function Navbar() {
   const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect(() => {
+    setMounted(true);
     // Check session storage for auth
     const jwt = sessionStorage.getItem("jwt");
     const name = sessionStorage.getItem("userName");
@@ -74,13 +79,17 @@ export function Navbar() {
     return router.pathname.startsWith(href);
   };
 
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-white/80 dark:bg-slate-900/80 backdrop-blur-lg shadow-md"
+          ? "bg-background/80 backdrop-blur-lg shadow-md border-b border-border/50"
           : "bg-transparent"
       }`}
     >
@@ -90,34 +99,34 @@ export function Navbar() {
           <Link href="/" className="flex items-center gap-2 group">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 rounded-lg blur-lg group-hover:blur-xl transition-all" />
-              <div className="relative bg-gradient-to-br from-primary to-accent p-2 rounded-lg">
+              <div className="relative bg-primary p-2 rounded-lg">
                 <Stethoscope className="h-6 w-6 text-white" />
               </div>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className="text-xl font-bold text-primary">
               Healix
             </span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                  isActiveLink(link.href)
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Desktop Auth Buttons */}
+          {/* Desktop Auth Button + Theme Toggle */}
           <div className="hidden lg:flex items-center gap-3">
+            {/* Theme Toggle */}
+            {mounted && (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleTheme}
+                className="rounded-full"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-5 w-5" />
+                ) : (
+                  <Moon className="h-5 w-5" />
+                )}
+              </Button>
+            )}
+
             {isLoggedIn ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -163,14 +172,9 @@ export function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <>
-                <Button variant="ghost" asChild>
-                  <Link href="/login">Sign In</Link>
-                </Button>
-                <Button asChild className="bg-primary hover:bg-primary/90">
-                  <Link href="/signup">Get Started</Link>
-                </Button>
-              </>
+              <Button asChild className="bg-primary hover:bg-primary/90">
+                <Link href="/signup">Get Started</Link>
+              </Button>
             )}
           </div>
 
@@ -185,7 +189,7 @@ export function Navbar() {
               <div className="flex flex-col h-full">
                 {/* Mobile Logo */}
                 <div className="flex items-center gap-2 pb-6 border-b">
-                  <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg">
+                  <div className="bg-primary p-2 rounded-lg">
                     <Stethoscope className="h-5 w-5 text-white" />
                   </div>
                   <span className="text-lg font-bold">Healix</span>
@@ -208,6 +212,29 @@ export function Navbar() {
                     </Link>
                   ))}
                 </div>
+
+                {/* Theme Toggle (Mobile) */}
+                {mounted && (
+                  <div className="px-4 py-3">
+                    <Button
+                      variant="outline"
+                      onClick={toggleTheme}
+                      className="w-full justify-start gap-3"
+                    >
+                      {theme === "dark" ? (
+                        <>
+                          <Sun className="h-4 w-4" />
+                          Light Mode
+                        </>
+                      ) : (
+                        <>
+                          <Moon className="h-4 w-4" />
+                          Dark Mode
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                )}
 
                 {/* Mobile Auth */}
                 <div className="mt-auto pt-6 border-t space-y-3">

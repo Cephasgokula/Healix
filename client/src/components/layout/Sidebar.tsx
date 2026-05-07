@@ -71,14 +71,14 @@ export function Sidebar({ className }: SidebarProps) {
       initial={false}
       animate={{ width: isCollapsed ? 80 : 280 }}
       className={cn(
-        "fixed left-0 top-0 h-screen bg-white dark:bg-slate-900 border-r border-border flex flex-col z-40",
+        "fixed left-0 top-0 h-screen bg-sidebar border-r border-border flex flex-col z-40",
         className
       )}
     >
       {/* Header */}
       <div className="h-16 lg:h-20 flex items-center px-4 border-b border-border">
         <Link href="/admin" className="flex items-center gap-3">
-          <div className="bg-gradient-to-br from-primary to-accent p-2 rounded-lg flex-shrink-0">
+          <div className="bg-primary p-2 rounded-lg flex-shrink-0">
             <Stethoscope className="h-5 w-5 text-white" />
           </div>
           {!isCollapsed && (
@@ -86,7 +86,7 @@ export function Sidebar({ className }: SidebarProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-lg font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+              className="text-lg font-bold text-primary"
             >
               Healix Admin
             </motion.span>

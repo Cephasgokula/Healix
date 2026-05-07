@@ -100,7 +100,7 @@ export default function UsersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
         >
-          <Card className="bg-white dark:bg-slate-800 border-0 shadow-md">
+          <Card className="bg-card border-0 shadow-md">
             <CardContent className="p-4">
               <div className="flex flex-col sm:flex-row gap-4">
                 <div className="relative flex-1">
@@ -143,7 +143,7 @@ export default function UsersPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="bg-white dark:bg-slate-800 border-0 shadow-md overflow-hidden">
+          <Card className="bg-card border-0 shadow-md overflow-hidden">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg">
                 Users ({filteredUsers.length})

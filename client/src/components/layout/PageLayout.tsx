@@ -38,7 +38,7 @@ export function PageLayout({ children, variant = "default", className }: PageLay
 
   if (variant === "auth") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <motion.main
           variants={pageVariants}
           initial="initial"
